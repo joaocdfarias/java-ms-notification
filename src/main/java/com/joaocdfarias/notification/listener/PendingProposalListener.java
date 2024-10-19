@@ -12,9 +12,13 @@ public class PendingProposalListener {
 
   private NotificationSnsService notificationSnsService;
 
+  public PendingProposalListener(NotificationSnsService notificationSnsService) {
+    this.notificationSnsService = notificationSnsService;
+  }
+
   @RabbitListener(queues = "${rabbitmq.queue.pending.proposal}")
   public void pendingProposal(Proposal proposal) {
     String message = String.format(MessagesConstant.PROPOSAL_IN_ANALYSIS, proposal.getUser().getName());
-    notificationSnsService.notify(message);
+    notificationSnsService.notify(message, proposal.getUser().getPhone());
   }
 }
